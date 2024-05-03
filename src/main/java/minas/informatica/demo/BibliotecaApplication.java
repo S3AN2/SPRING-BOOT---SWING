@@ -27,7 +27,6 @@ public class BibliotecaApplication {
 		//obtenemos el objeto form a traves de Spring
 			LibroForm libroForm = context.getBean(LibroForm.class);
 			libroForm.setVisible(true);
-
 		});
 	}
 

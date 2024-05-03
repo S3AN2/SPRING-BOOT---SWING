@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 @Service
 public class LibroServicio implements  ILibroServicio {
-@Autowired
+    @Autowired
     private LibroRepositorio libroRepositorio;
 
     @Override
@@ -28,7 +28,7 @@ public class LibroServicio implements  ILibroServicio {
     }
 
     @Override
-    public void eliminarLibro(Libro libro) {
-    libroRepositorio.delete(libro);
+    public void eliminarLibro(Integer idLibro) {
+    libroRepositorio.deleteById(idLibro);
     }
 }
