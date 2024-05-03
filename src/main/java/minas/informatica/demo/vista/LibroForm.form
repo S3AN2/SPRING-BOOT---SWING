@@ -182,7 +182,7 @@
         </constraints>
         <properties>
           <font size="28"/>
-          <text value="TIENDA"/>
+          <text value="TIENDA DE LIBROS"/>
         </properties>
       </component>
       <grid id="6afff" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
