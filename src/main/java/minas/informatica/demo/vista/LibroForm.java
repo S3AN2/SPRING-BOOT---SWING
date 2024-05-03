@@ -34,12 +34,13 @@ public class LibroForm extends JFrame {
 
 
     LibroServicio libroServicio;
+
     //para inyectar la dependencia de spring es atravez del constructor, no por atributo
     @Autowired
-    public LibroForm(LibroServicio libroServicio){
-        this.libroServicio=libroServicio;
+    public LibroForm(LibroServicio libroServicio) {
+        this.libroServicio = libroServicio;
         iniciarForma();
-        btnAgregar.addActionListener(e ->  agregarLibro()
+        btnAgregar.addActionListener(e -> agregarLibro()
 
         );
         tblLibros.addMouseListener(new MouseAdapter() {
@@ -49,30 +50,29 @@ public class LibroForm extends JFrame {
                 cargarLibroSelec();
             }
         });
-        btnModificar.addActionListener( e -> modificarLibro());
-        btnEliminar.addActionListener(e-> eliminarRegistro());
+        btnModificar.addActionListener(e -> modificarLibro());
+        btnEliminar.addActionListener(e -> eliminarRegistro());
     }
 
 
-
-    public  void iniciarForma(){
+    public void iniciarForma() {
         setContentPane(panel);
         //para cerrar la aplicacion con exito
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        setSize(900,700);
+        setSize(900, 700);
         //para obtener dimensiones de la ventana
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-      //obtneer el tamaño de la pantalla
-        Dimension tamanio  =toolkit.getScreenSize();
-        int x=(tamanio.width-getWidth()/2);
-        int y=(tamanio.height=getHeight()/2);
-        setLocation(x,y);
+        //obtneer el tamaño de la pantalla
+        Dimension tamanio = toolkit.getScreenSize();
+        int x = (tamanio.width - getWidth() / 2);
+        int y = (tamanio.height = getHeight() / 2);
+        setLocation(x, y);
     }
 
     private void agregarLibro() {
         //leer los valores del formulario
-        if(txtLibro.getText().equals("")){
+        if (txtLibro.getText().equals("")) {
             mostarMensaje("ingrese nombre del libro");
             txtLibro.requestFocusInWindow();
             return;
@@ -84,7 +84,7 @@ public class LibroForm extends JFrame {
         var existencias = Integer.parseInt(txtExistencias.getText());
 
         //crear el objeto libro
-        var libro =new Libro(null,nombreLibro,autor,precio,existencias);
+        var libro = new Libro(null, nombreLibro, autor, precio, existencias);
         //libro.setNombreLibro(nombreLibro);
         //libro.setAutor(autor);
         //libro.setPrecio(precio);
@@ -95,38 +95,37 @@ public class LibroForm extends JFrame {
         listarLibros();
     }
 
-    private  void cargarLibroSelec(){
+    private void cargarLibroSelec() {
         //los indices de las columnsa inicias en 0
-        var reglon= tblLibros.getSelectedRow();
-        if(reglon != -1){ //regresa -1 si no se selecciona
-            String idLibro=
-                    tblLibros.getModel().getValueAt(reglon,0).toString();
+        var reglon = tblLibros.getSelectedRow();
+        if (reglon != -1) { //regresa -1 si no se selecciona
+            String idLibro =
+                    tblLibros.getModel().getValueAt(reglon, 0).toString();
             idTexto.setText(idLibro);
-            String nombreLibro=
-                    tblLibros.getModel().getValueAt(reglon,1).toString();
-                txtLibro.setText(nombreLibro);
-            String autor=
-                    tblLibros.getModel().getValueAt(reglon,2).toString();
+            String nombreLibro =
+                    tblLibros.getModel().getValueAt(reglon, 1).toString();
+            txtLibro.setText(nombreLibro);
+            String autor =
+                    tblLibros.getModel().getValueAt(reglon, 2).toString();
             txtAutor.setText(autor);
-            String precio=
-                    tblLibros.getModel().getValueAt(reglon,3).toString();
+            String precio =
+                    tblLibros.getModel().getValueAt(reglon, 3).toString();
             txtPrecio.setText(precio);
-            String existencias=
-                    tblLibros.getModel().getValueAt(reglon,4).toString();
+            String existencias =
+                    tblLibros.getModel().getValueAt(reglon, 4).toString();
             txtExistencias.setText(existencias);
             //
         }
 
     }
 
-    private void modificarLibro(){
-        if (this.idTexto.getText().equals("")){
+    private void modificarLibro() {
+        if (this.idTexto.getText().equals("")) {
             mostarMensaje("Debe seleccionar un registro");
 
-        }
-        else {
+        } else {
             //verificamos que el nombre del libro no sea nulo
-            if(txtLibro.getText().equals("")){
+            if (txtLibro.getText().equals("")) {
                 mostarMensaje("Proporciona el nombre del Libro...");
                 txtLibro.requestFocusInWindow();
                 return;
@@ -134,11 +133,11 @@ public class LibroForm extends JFrame {
             }
             //llenamos el objeto del libro actualizar
             int idLibro = Integer.parseInt(idTexto.getText());
-            var nombreLibro= txtLibro.getText();
-            var autor= txtAutor.getText();
-            var precio=  txtPrecio.getText();
-            var existencias=txtExistencias.getText();
-            var libro  =new Libro(idLibro,nombreLibro,autor,Double.parseDouble(precio),Integer.parseInt(existencias));
+            var nombreLibro = txtLibro.getText();
+            var autor = txtAutor.getText();
+            var precio = txtPrecio.getText();
+            var existencias = txtExistencias.getText();
+            var libro = new Libro(idLibro, nombreLibro, autor, Double.parseDouble(precio), Integer.parseInt(existencias));
             libroServicio.guardarLibro(libro);
             mostarMensaje("SE MODIFICO EL LIBRO");
             limpiarFormulario();
@@ -149,13 +148,19 @@ public class LibroForm extends JFrame {
     }
 
     private void eliminarRegistro() {
-        if (this.idTexto.getText().equals("")){
-            mostarMensaje("Debe seleccionar un registro para eliminar");
-
+        var reglon = tblLibros.getSelectedRow();
+        if (reglon != -1) {
+            String idLib = tblLibros.getModel().getValueAt(reglon, 0).toString();
+            Libro libro = new Libro();
+            libro.setIdlibro(Integer.parseInt(idLib));
+            libroServicio.eliminarLibro(libro);
         }
-        else {
+/*
+        if (this.idTexto.getText().equals("")) {
+            mostarMensaje("Debe seleccionar un registro para eliminar");
+        } else {
             //verificamos que el nombre del libro no sea nulo
-            if(txtLibro.getText().equals("")){
+            if (txtLibro.getText().equals("")) {
                 mostarMensaje("Proporciona el nombre del Libro...");
                 txtLibro.requestFocusInWindow();
                 return;
@@ -165,14 +170,14 @@ public class LibroForm extends JFrame {
             int idLibro = Integer.parseInt(idTexto.getText());
 
 
-            libroServicio.eliminarLibro(idLibro);
+            libroServicio.eliminarLibro(idLibro);*/
             mostarMensaje("SE ELIMINO EL REGISTRO");
             limpiarFormulario();
             listarLibros();
 
         }
 
-    }
+
 
     private void limpiarFormulario() {
         txtLibro.setText("");
@@ -182,28 +187,31 @@ public class LibroForm extends JFrame {
 
     }
 
-
     private void mostarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this,mensaje);
+        JOptionPane.showMessageDialog(this, mensaje);
     }
 
 
     private void createUIComponents() {
         //crear objeto Default table
         //creamos el elemento idtexto oculto
-        idTexto= new JTextField("");
+        idTexto = new JTextField("");
         idTexto.setVisible(false);
-    this.tableModel  =new DefaultTableModel(0,5){
-        @Override
-        public  boolean isCellEditable(int row, int column ){return false;}
+        this.tableModel = new DefaultTableModel(0, 5) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
 
-    };
-    //arreglo para especificar los cabeceros
-    String [] cabeceros = {"id","Libro","Autor","Precio","Existencias"};
-    //identificar los cabeceros
-    this.tableModel.setColumnIdentifiers(cabeceros);
-    //instanciar el objeto Jtable
-        this.tblLibros= new JTable(tableModel);
+        };
+        //arreglo para especificar los cabeceros
+        String[] cabeceros = {"id", "Libro", "Autor", "Precio", "Existencias"};
+        //identificar los cabeceros
+        this.tableModel.setColumnIdentifiers(cabeceros);
+        //instanciar el objeto Jtable
+        this.tblLibros = new JTable(tableModel);
+        //evitar que se seleccione varios registros
+        tblLibros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listarLibros();
     }
 
@@ -212,7 +220,7 @@ public class LibroForm extends JFrame {
         tableModel.setRowCount(0);
         //obtener los libros
         var libros = libroServicio.listarLibros();
-        libros.forEach((libro)-> {
+        libros.forEach((libro) -> {
             Object[] renglonLibro = {
                     libro.getIdlibro(),
                     libro.getNombreLibro(),

@@ -8,6 +8,6 @@ public interface ILibroServicio  {
     public List<Libro> listarLibros();
     public Libro buscarLibroPorId(Integer idLibro);
     public void guardarLibro(Libro libro);
-    public void eliminarLibro(Integer idLibro);
+    public void eliminarLibro(Libro libro);
 
 }
